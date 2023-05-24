@@ -65,7 +65,7 @@ body {
 
 .hero {
   height: 90vh;
-  background-image: url(../Elements/atul-vinayak-jKvwtbrxzdY-unsplash.jpg);
+  background-image: url(../elements/atul-vinayak-jKvwtbrxzdY-unsplash.jpg);
   background-size: cover;
   background-position: 100% 25%;
   display: flex;
