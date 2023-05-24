@@ -1,56 +1,64 @@
 class Producto {
-    constructor(id, titulo, material, peso, precio, categoria) {
+    constructor(id, titulo, material, peso, precio, categoria, imagen) {
         this.id = id;
         this.titulo = titulo;
         this.material = material;
         this.peso = peso;
         this.precio = precio;
         this.categoria = categoria;
-        // this.imagen = imagen;
+        this.imagen = imagen;
     }
 }
 
 const productos = [];
-// let productosCarrito = [];
 const contenedorProductos = document.querySelector("#contenedor-productos");
 let botonAgregar = document.querySelectorAll(".agregar-producto");
-const cantidadCarrito = document.querySelector("#cantidad-carrito")
-// let productosCarrito = JSON.parse(localStorage.getItem('productosCarrito')) || [];
+const cantidadCarrito = document.querySelector("#cantidad-carrito");
+let productosCarrito = [];
+let productosCarritoLS = JSON.parse(localStorage.getItem('productosCarrito')) || [];
 
-productos.push(new Producto("ardor1", "Glow Up", "enchapado en oro", 2.2, 1900, "Aros"));
-productos.push(new Producto("ardor2", "Essentials", "enchapado en oro", 2.2, 2200, "Aros"));
-productos.push(new Producto("ardor3", "Doubler", "enchapado en oro", 2.2, 1800, "Aros"));
-productos.push(new Producto("ardor4", "Pangea", "enchapado en oro", 2.2, 2500, "Aros"));
+productos.push(new Producto("ardor1", "Glow Up", "enchapado en oro", 2.2, 1900, "Aros", "../elements/ardor-glow-up.jpeg"));
+productos.push(new Producto("ardor2", "Essentials", "enchapado en oro", 2.2, 2200, "Aros", "../elements/ardor-essentials.jpeg"));
+productos.push(new Producto("ardor3", "Doubler", "enchapado en oro", 2.2, 1800, "Aros", "../elements/ardor-doubler.jpeg"));
+productos.push(new Producto("ardor4", "Pangea", "enchapado en oro", 2.2, 2500, "Aros", "../elements/ardor-pangea.jpeg"));
+productos.push(new Producto("ardor5", "Climax", "enchapado en oro", 2.2, 2350, "Aros", "../elements/ardor-climax.jpeg"));
+productos.push(new Producto("ardor6", "Square", "enchapado en oro", 2.2, 1900, "Aros", "../elements/ardor-square.jpeg"));
+productos.push(new Producto("ardor7", "Encore", "enchapado en oro", 2.2, 2100, "Aros", "../elements/ardor-encore.jpeg"));
 
+document.addEventListener("DOMContentLoaded", function () {
+    cargarProductos();
+    traerCarritoDeLS();
+
+    const botonVaciarCarrito = document.querySelector("#vaciarCarrito");
+    botonVaciarCarrito.addEventListener("click", vaciarCarrito);
+
+    const botonComprar = document.querySelector("#comprar");
+    botonComprar.addEventListener("click", comprar);
+});
 
 function cargarProductos() {
-
-        console.log(contenedorProductos); // Agregado para verificar si se encuentra el contenedor de productos
-        console.log(botonAgregar); // Agregado para verificar si se seleccionan los botones correctamente
-
     productos.forEach((producto) => {
         const div = document.createElement("div");
         div.classList.add("card");
         div.innerHTML = `
-        <div class="card">
-        <div class="img">
-            <img class="img-producto" src="${producto.imagen}">
-        </div>
-        <div class="info-producto">
-            <h4 id="NombreProducto">${producto.categoria} ${producto.titulo}</h4>
-            <h5 id="precio">$${producto.precio}</h5>
-            <button class="agregar-producto" id="${producto.id}">Agregar</button>
-        </div>
-        </div>
-    `;
-
+            <div class="card">
+                <div class="img">
+                    <img class="img-producto" src="${producto.imagen}">
+                </div>
+                <div class="info-producto">
+                    <h4 id="NombreProducto">${producto.categoria} ${producto.titulo}</h4>
+                    <h5 id="precio">$${producto.precio}</h5>
+                    <button class="agregar-producto" id="${producto.id}">Agregar</button>
+                </div>
+            </div>
+        `;
         contenedorProductos.append(div);
     });
 
     actualizarAgregar();
+    actualizarCantidad();
+    actualizarTotal();
 }
-
-cargarProductos()
 
 function actualizarAgregar() {
     botonAgregar = document.querySelectorAll(".agregar-producto");
@@ -59,22 +67,28 @@ function actualizarAgregar() {
     });
 }
 
-let productosCarrito = [];
-let productosCarritoLS = JSON.parse(localStorage.getItem('productosCarrito')) || [];
-
-if (productosCarritoLS) {
-    productosCarrito = JSON.parse(productosCarritoLS);
+function traerCarritoDeLS() {
+    if (productosCarritoLS && productosCarritoLS.length > 0) {
+        productosCarritoLS.forEach((productoCarrito) => {
+            const producto = productos.find((p) => p.id === productoCarrito.id);
+            if (producto) {
+                producto.cantidad = productoCarrito.cantidad;
+                productosCarrito.push(producto);
+            }
+        });
+    } else {
+        productosCarrito = [];
+    }
     actualizarCantidad();
-} else {
-    productosCarrito = [];
+    actualizarTotal();
 }
+
 
 function agregarAlCarrito(e) {
     const idBoton = e.currentTarget.id;
     const productoAgregado = productos.find(producto => producto.id === idBoton);
 
     if (productosCarrito.some(producto => producto.id === idBoton)) {
-
         const index = productosCarrito.findIndex(producto => producto.id === idBoton);
         productosCarrito[index].cantidad++;
     } else {
@@ -83,25 +97,40 @@ function agregarAlCarrito(e) {
     }
 
     actualizarCantidad();
+    actualizarTotal();
 
-    localStorage.setItem("productosCarrito", JSON.stringify(productosCarrito));
-
-    GuardarProductosLS();
-
+    guardarProductosLS();
 }
 
-
-function actualizarCantidad(){
+function actualizarCantidad() {
     let cantidad = productosCarrito.reduce((acumulador, producto) => acumulador + producto.cantidad, 0);
-    const cantidadCarrito = document.querySelector("#cantidad-carrito");
     cantidadCarrito.innerText = `Productos en carrito: ${cantidad}`;
-    
-    GuardarProductosLS()
 }
 
+function actualizarTotal() {
+    let sumaTotal = productosCarrito.reduce((acumulador, producto) => acumulador + (producto.precio * producto.cantidad), 0);
+    const totalCarrito = document.querySelector("#total-carrito");
+    totalCarrito.innerText = `Total: ${sumaTotal}`;
+}
 
+const botonVaciarCarrito = document.querySelector("#vaciarCarrito");
+botonVaciarCarrito.addEventListener("click", vaciarCarrito);
 
-//Guardar en Local Storage
-function GuardarProductosLS() {
+const botonComprar = document.querySelector("#comprar");
+botonComprar.addEventListener("click", comprar);
+
+function vaciarCarrito() {
+    productosCarrito = [];
+    actualizarCantidad();
+    actualizarTotal();
+    guardarProductosLS();
+}
+
+function comprar() {
+    console.log("Botón Comprar clickeado");
+    alert("Compra exitosa");
+}
+
+function guardarProductosLS() {
     localStorage.setItem("productosCarrito", JSON.stringify(productosCarrito));
 }
