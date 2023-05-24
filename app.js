@@ -41,14 +41,14 @@ function cargarProductos() {
         const div = document.createElement("div");
         div.classList.add("card");
         div.innerHTML = `
-            <div class="card">
-                <div class="img">
-                    <img class="img-producto" src="${producto.imagen}">
-                </div>
+            <div class="cardInfo">
                 <div class="info-producto">
+                    <div class="img">
+                        <img class="img-producto" src="${producto.imagen}">
+                    </div>
                     <h4 id="NombreProducto">${producto.categoria} ${producto.titulo}</h4>
                     <h5 id="precio">$${producto.precio}</h5>
-                    <button class="agregar-producto" id="${producto.id}">Agregar</button>
+                    <button class="agregar-producto btn" id="${producto.id}">Agregar</button>
                 </div>
             </div>
         `;
@@ -129,6 +129,8 @@ function vaciarCarrito() {
 function comprar() {
     console.log("Botón Comprar clickeado");
     alert("Compra exitosa");
+    
+    vaciarCarrito()
 }
 
 function guardarProductosLS() {
