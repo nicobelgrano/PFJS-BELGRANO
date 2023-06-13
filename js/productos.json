@@ -1,0 +1,65 @@
+[
+    {
+        "id": "ardor1",
+        "titulo": "Glow Up",
+        "material": "enchapado en oro",
+        "peso": 2.2,
+        "precio": 1900,
+        "categoria": "Aros",
+        "imagen": "../elements/ardor-glow-up.jpeg"
+    },
+    {
+        "id": "ardor2",
+        "titulo": "Essentials",
+        "material": "enchapado en oro",
+        "peso": 2.2,
+        "precio": 2200,
+        "categoria": "Aros",
+        "imagen": "../elements/ardor-essentials.jpeg"
+    },
+    {
+        "id": "ardor3",
+        "titulo": "Doubler",
+        "material": "enchapado en oro",
+        "peso": 2.2,
+        "precio": 1800,
+        "categoria": "Aros",
+        "imagen": "../elements/ardor-doubler.jpeg"
+    },
+    {
+        "id": "ardor4",
+        "titulo": "Pangea",
+        "material": "enchapado en oro",
+        "peso": 2.2,
+        "precio": 2500,
+        "categoria": "Aros",
+        "imagen": "../elements/ardor-pangea.jpeg"
+    },
+    {
+        "id": "ardor5",
+        "titulo": "Climax",
+        "material": "enchapado en oro",
+        "peso": 2.2,
+        "precio": 2350,
+        "categoria": "Aros",
+        "imagen": "../elements/ardor-climax.jpeg"
+    },
+    {
+        "id": "ardor6",
+        "titulo": "Square",
+        "material": "enchapado en oro",
+        "peso": 2.2,
+        "precio": 1900,
+        "categoria": "Aros",
+        "imagen": "../elements/ardor-square.jpeg"
+    },
+    {
+        "id": "ardor7",
+        "titulo": "Encore",
+        "material": "enchapado en oro",
+        "peso": 2.2,
+        "precio": 2100,
+        "categoria": "Aros",
+        "imagen": "../elements/ardor-encore.jpeg"
+    }
+]

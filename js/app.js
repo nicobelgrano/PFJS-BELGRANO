@@ -10,7 +10,7 @@ class Producto {
     }
 }
 
-const productos = [];
+// const productos = [];
 const contenedorProductos = document.querySelector("#contenedor-productos");
 let botonAgregar = document.querySelectorAll(".agregar-producto");
 let botonEliminar = document.querySelectorAll(".eliminar-producto")
@@ -18,13 +18,13 @@ const cantidadCarrito = document.querySelector("#cantidad-carrito");
 let productosCarrito = [];
 let productosCarritoLS = JSON.parse(localStorage.getItem('productosCarrito')) || [];
 
-productos.push(new Producto("ardor1", "Glow Up", "enchapado en oro", 2.2, 1900, "Aros", "../elements/ardor-glow-up.jpeg"));
-productos.push(new Producto("ardor2", "Essentials", "enchapado en oro", 2.2, 2200, "Aros", "../elements/ardor-essentials.jpeg"));
-productos.push(new Producto("ardor3", "Doubler", "enchapado en oro", 2.2, 1800, "Aros", "../elements/ardor-doubler.jpeg"));
-productos.push(new Producto("ardor4", "Pangea", "enchapado en oro", 2.2, 2500, "Aros", "../elements/ardor-pangea.jpeg"));
-productos.push(new Producto("ardor5", "Climax", "enchapado en oro", 2.2, 2350, "Aros", "../elements/ardor-climax.jpeg"));
-productos.push(new Producto("ardor6", "Square", "enchapado en oro", 2.2, 1900, "Aros", "../elements/ardor-square.jpeg"));
-productos.push(new Producto("ardor7", "Encore", "enchapado en oro", 2.2, 2100, "Aros", "../elements/ardor-encore.jpeg"));
+// productos.push(new Producto("ardor1", "Glow Up", "enchapado en oro", 2.2, 1900, "Aros", "../elements/ardor-glow-up.jpeg"));
+// productos.push(new Producto("ardor2", "Essentials", "enchapado en oro", 2.2, 2200, "Aros", "../elements/ardor-essentials.jpeg"));
+// productos.push(new Producto("ardor3", "Doubler", "enchapado en oro", 2.2, 1800, "Aros", "../elements/ardor-doubler.jpeg"));
+// productos.push(new Producto("ardor4", "Pangea", "enchapado en oro", 2.2, 2500, "Aros", "../elements/ardor-pangea.jpeg"));
+// productos.push(new Producto("ardor5", "Climax", "enchapado en oro", 2.2, 2350, "Aros", "../elements/ardor-climax.jpeg"));
+// productos.push(new Producto("ardor6", "Square", "enchapado en oro", 2.2, 1900, "Aros", "../elements/ardor-square.jpeg"));
+// productos.push(new Producto("ardor7", "Encore", "enchapado en oro", 2.2, 2100, "Aros", "../elements/ardor-encore.jpeg"));
 
 document.addEventListener("DOMContentLoaded", function () {
     cargarProductos();
@@ -38,33 +38,38 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function cargarProductos() {
-    productos.forEach((producto) => {
-        const div = document.createElement("div");
-        div.classList.add("card");
-        div.innerHTML = `
-            <div class="cardInfo">
-                
-                <div class="imagen">
-                    <img class="img-producto" src="${producto.imagen}">
-                </div>
-
-                <div class="info-producto">
-                    <h4 id="NombreProducto">${producto.categoria} ${producto.titulo}</h4>
-                    <h5 id="precio">$${producto.precio}</h5>
-                </div>    
-                    <div class="botones">
-                        <button class="agregar-producto btn" id="${producto.id}">Agregar</button>
-                        <button class="eliminar-producto btn" id="eliminar-${producto.id}">Eliminar</button>
+    fetch("../js/productos.json")
+        .then(response => response.json())
+        .then(data => {
+            productos = data;
+            productos.forEach((producto) => {
+                const div = document.createElement("div");
+                div.classList.add("card");
+                div.innerHTML = `
+                    <div class="cardInfo">
+                        <div class="imagen">
+                            <img class="img-producto" src="${producto.imagen}">
+                        </div>
+                        <div class="info-producto">
+                            <h4 id="NombreProducto">${producto.categoria} ${producto.titulo}</h4>
+                            <h5 id="precio">$${producto.precio}</h5>
+                        </div>
+                        <div class="botones">
+                            <button class="agregar-producto btn" id="${producto.id}">Agregar</button>
+                            <button class="eliminar-producto btn" id="eliminar-${producto.id}">Eliminar</button>
+                        </div>
                     </div>
-                
-            </div>
-        `;
-        contenedorProductos.append(div);
-    });
+                `;
+                contenedorProductos.append(div);
+            });
 
-    actualizarAgregar();
-    actualizarCantidad();
-    actualizarTotal();
+            actualizarAgregar();
+            actualizarCantidad();
+            actualizarTotal();
+        })
+        .catch(error => {
+            console.log("Error al cargar los productos:", error);
+        });
 }
 
 function actualizarAgregar() {
